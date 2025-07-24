@@ -1,0 +1,5 @@
+2025-07-23
+1. Khởi tạo eureka server (spring boot version 3.5.3, spring cloud version 2025.0.0)
+1.1. Issue 1: bị lỗi OnlineCourseEurekaServerApplicationTests > contextLoads() FAILED
+- Nguyên nhân: contextLoads load thiếu bean của eureka server
+- Giải pháp: xóa hàm test và không dùng @SpringbootTest
