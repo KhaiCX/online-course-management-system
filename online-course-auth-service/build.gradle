@@ -32,7 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -40,6 +40,16 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // For the core JWT API
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5' // Use the latest stable version
+
+    // For runtime implementation (e.g., based on Jackson for JSON processing)
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5' // Use the same version as jjwt-api
+
+    // For cryptographic signature algorithms (e.g., based on Bouncy Castle or Nimbus JOSE+JWT)
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5' // Or jjwt-orgjson, jjwt-gson if using other JSON libraries
 }
 
 dependencyManagement {
