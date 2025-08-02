@@ -1,11 +1,7 @@
 package com.authservice.model.http.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
-@Getter
-@Setter
-public class RegisterResponse {
-    private String message;
-
+@Builder
+public record RegisterResponse(String message) {
 }

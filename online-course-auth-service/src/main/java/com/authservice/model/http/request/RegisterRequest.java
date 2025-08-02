@@ -1,12 +1,7 @@
 package com.authservice.model.http.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
-@Getter
-@Setter
-public class RegisterRequest {
-    private String username;
-    private String password;
-
+@Builder
+public record RegisterRequest(String username, String password) {
 }

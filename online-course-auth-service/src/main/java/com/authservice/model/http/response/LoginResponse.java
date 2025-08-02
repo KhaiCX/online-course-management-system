@@ -1,10 +1,7 @@
 package com.authservice.model.http.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
-@Getter
-@Setter
-public class LoginResponse {
-    private String token;
+@Builder
+public record LoginResponse(String token) {
 }

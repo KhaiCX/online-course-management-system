@@ -11,7 +11,7 @@ import com.authservice.config.JwtTokenProvider;
 import com.authservice.entity.CustomUserDetails;
 import com.authservice.entity.Role;
 import com.authservice.entity.User;
-import com.authservice.exception.RoleNotFoundException;
+import com.authservice.exception.NotFoundException;
 import com.authservice.model.enums.ERole;
 import com.authservice.model.http.request.LoginRequest;
 import com.authservice.model.http.request.RegisterRequest;
@@ -33,33 +33,31 @@ public class UserService {
 
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User nnot found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public RegisterResponse register(RegisterRequest request) {
         Role role = roleRepository.findByRole(ERole.ROLE_USER)
-                .orElseThrow(() -> new RoleNotFoundException("Role not found"));
+                .orElseThrow(() -> new NotFoundException("Role not found"));
 
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
         user.setRoles(Set.of(role));
         userRepository.save(user);
 
-        RegisterResponse response = new RegisterResponse();
-        response.setMessage("User registered successfully!!!");
+        RegisterResponse response = RegisterResponse.builder().message("User registered successfully!!!").build();
         return response;
     }
 
     public LoginResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = jwtTokenProvider.generateToken(userDetails.getUserId(), userDetails.getAuthorities());
 
         refreshTokenService.createRefreshToken(userDetails.getUserId());
-        LoginResponse response = new LoginResponse();
-        response.setToken(token);
+        LoginResponse response = LoginResponse.builder().token(token).build();
         return response;
     }
 
