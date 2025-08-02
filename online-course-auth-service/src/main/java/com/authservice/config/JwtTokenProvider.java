@@ -2,6 +2,8 @@ package com.authservice.config;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
+
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +14,6 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
     private final String application;
-
     private final SecretKey secretKey;
 
     public JwtTokenProvider(
@@ -21,11 +22,11 @@ public class JwtTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String generateToken(String userId, Collection<? extends GrantedAuthority> role) {
+    public String generateToken(UUID userId, Collection<? extends GrantedAuthority> role) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + 60 * 60 * 1000);
         return Jwts.builder()
-                .subject(userId)
+                .subject(userId.toString())
                 .issuer(application)
                 .claim("role", role)
                 .issuedAt(new Date())

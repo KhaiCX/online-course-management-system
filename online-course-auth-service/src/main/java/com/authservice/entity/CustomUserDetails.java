@@ -1,6 +1,7 @@
 package com.authservice.entity;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,6 +46,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UUID getUserId() {
+        return user.getUserId();
     }
 
 }

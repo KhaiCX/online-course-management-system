@@ -29,6 +29,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenService refreshTokenService;
 
     public User getByUsername(String username) {
         return userRepository.findByUsername(username)
@@ -54,8 +55,9 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        String token = jwtTokenProvider.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+        String token = jwtTokenProvider.generateToken(userDetails.getUserId(), userDetails.getAuthorities());
 
+        refreshTokenService.createRefreshToken(userDetails.getUserId());
         LoginResponse response = new LoginResponse();
         response.setToken(token);
         return response;
