@@ -27,7 +27,7 @@ public class RefreshTokenService {
 
     public void createRefreshToken(UUID userId, String refreshTokenParam) {
         User user = userRepository.findByUserId(userId).orElseThrow();
-        List<RefreshToken> refreshTokens = refreshTokenRepository.findByUser(user);
+        List<RefreshToken> refreshTokens = user.getRefreshTokens();
         if (refreshTokens.isEmpty()) {
             throw new NotFoundException("List refresh Token Not Found");
         }
