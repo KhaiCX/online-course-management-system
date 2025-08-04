@@ -2,6 +2,7 @@ package com.authservice.service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import com.authservice.config.JwtTokenProvider;
@@ -26,7 +27,12 @@ public class RefreshTokenService {
 
     public void createRefreshToken(UUID userId, String refreshTokenParam) {
         User user = userRepository.findByUserId(userId).orElseThrow();
-        RefreshToken refreshToken = refreshTokenRepository.findByUser(user).orElse(new RefreshToken());
+        List<RefreshToken> refreshTokens = refreshTokenRepository.findByUser(user);
+        if (refreshTokens.isEmpty()) {
+            throw new NotFoundException("List refresh Token Not Found");
+        }
+
+        RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(userRepository.findByUserId(userId).orElseThrow());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(refreshTokenParam);
