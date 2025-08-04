@@ -1,7 +1,10 @@
 package com.authservice.model.http.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 @Builder
-public record RegisterRequest(String username, String password) {
+public record RegisterRequest(
+        @JsonProperty("username") String username,
+        @JsonProperty("password") String password) {
 }

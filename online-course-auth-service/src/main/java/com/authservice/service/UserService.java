@@ -1,6 +1,8 @@
 package com.authservice.service;
 
 import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,8 +58,9 @@ public class UserService {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = jwtTokenProvider.generateToken(userDetails.getUserId(), userDetails.getAuthorities());
 
-        refreshTokenService.createRefreshToken(userDetails.getUserId());
-        LoginResponse response = LoginResponse.builder().token(token).build();
+        String refreshToken = UUID.randomUUID().toString();
+        refreshTokenService.createRefreshToken(userDetails.getUserId(), refreshToken);
+        LoginResponse response = LoginResponse.builder().accessToken(token).refreshToken(refreshToken).build();
         return response;
     }
 
